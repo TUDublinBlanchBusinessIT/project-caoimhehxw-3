@@ -18,6 +18,7 @@
                 <th>Email</th>
                 <th>Date of Birth</th>
                 <th>Created At</th>
+                <th>Actions</th> <!-- NEW COLUMN -->
             </tr>
         </thead>
         <tbody>
@@ -28,10 +29,18 @@
                     <td>{{ $student->email }}</td>
                     <td>{{ $student->date_of_birth }}</td>
                     <td>{{ $student->created_at->format('d M Y') }}</td>
+                    <td>
+                        <!-- DELETE FORM -->
+                        <form action="{{ route('students.destroy', $student->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5">No students found.</td>
+                    <td colspan="6">No students found.</td>
                 </tr>
             @endforelse
         </tbody>

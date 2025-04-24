@@ -1,8 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StudentController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/students');
 });
-Route::resource('students', \App\Http\Controllers\StudentController::class);
+
+Route::resource('students', StudentController::class);
