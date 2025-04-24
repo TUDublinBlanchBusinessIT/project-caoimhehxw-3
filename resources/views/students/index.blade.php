@@ -18,7 +18,7 @@
                 <th>Email</th>
                 <th>Date of Birth</th>
                 <th>Created At</th>
-                <th>Actions</th> <!-- NEW COLUMN -->
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -29,8 +29,9 @@
                     <td>{{ $student->email }}</td>
                     <td>{{ $student->date_of_birth }}</td>
                     <td>{{ $student->created_at->format('d M Y') }}</td>
-                    <td>
-                        <!-- DELETE FORM -->
+                    <td class="d-flex gap-2">
+                        <a href="{{ route('students.edit', $student->id) }}" class="btn btn-warning btn-sm">Edit</a>
+
                         <form action="{{ route('students.destroy', $student->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
                             @csrf
                             @method('DELETE')
