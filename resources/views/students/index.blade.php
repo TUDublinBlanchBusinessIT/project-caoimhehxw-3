@@ -8,7 +8,16 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <a href="{{ route('students.create') }}" class="btn btn-primary mb-3">Add New Student</a>
+    <!-- Search Form -->
+    <form method="GET" action="{{ route('students.index') }}" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Search by name or email..." value="{{ request('search') }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a href="{{ route('students.index') }}" class="btn btn-secondary">Reset</a>
+        </div>
+    </form>
+
+    <a href="{{ route('students.create') }}" class="btn btn-success mb-3">Add New Student</a>
 
     <table class="table table-bordered">
         <thead>
