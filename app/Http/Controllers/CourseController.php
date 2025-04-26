@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Course;
 
 class CourseController extends Controller
 {
@@ -11,7 +12,8 @@ class CourseController extends Controller
      */
     public function index()
     {
-        return view('courses.index'); // <<< FIXED THIS!
+        $courses = Course::all();
+        return view('courses.index', compact('courses'));
     }
 
     /**
@@ -27,15 +29,13 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        // store logic later
-    }
+        $validated = $request->validate([
+            'course' => 'required|string|max:255',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        Course::create($validated);
+
+        return redirect()->route('courses.index')->with('success', 'Course added successfully!');
     }
 
     /**
@@ -43,7 +43,8 @@ class CourseController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $course = Course::findOrFail($id);
+        return view('courses.edit', compact('course'));
     }
 
     /**
@@ -51,7 +52,14 @@ class CourseController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'course' => 'required|string|max:255',
+        ]);
+
+        $course = Course::findOrFail($id);
+        $course->update($validated);
+
+        return redirect()->route('courses.index')->with('success', 'Course updated successfully!');
     }
 
     /**
@@ -59,6 +67,9 @@ class CourseController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $course = Course::findOrFail($id);
+        $course->delete();
+
+        return redirect()->route('courses.index')->with('success', 'Course deleted successfully!');
     }
 }
