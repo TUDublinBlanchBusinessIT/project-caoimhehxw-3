@@ -4,24 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
+use App\Models\Course; // Important for dropdown
 
 class StudentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $query = Student::query();
-
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $query->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
-        }
-
-        $students = $query->get();
-
+        $students = Student::all();
         return view('students.index', compact('students'));
     }
 
@@ -30,7 +22,8 @@ class StudentController extends Controller
      */
     public function create()
     {
-        return view('students.create');
+        $courses = Course::all();
+        return view('students.create', compact('courses'));
     }
 
     /**
@@ -42,11 +35,12 @@ class StudentController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:students,email',
             'date_of_birth' => 'required|date',
+            'course_id' => 'required|exists:courses,id',
         ]);
 
         Student::create($validated);
 
-        return redirect()->route('students.create')->with('success', 'Student added successfully!');
+        return redirect()->route('students.index')->with('success', 'Student added successfully!');
     }
 
     /**
@@ -62,8 +56,7 @@ class StudentController extends Controller
      */
     public function edit(string $id)
     {
-        $student = Student::findOrFail($id);
-        return view('students.edit', compact('student'));
+        //
     }
 
     /**
@@ -71,17 +64,7 @@ class StudentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $student = Student::findOrFail($id);
-
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:students,email,' . $student->id,
-            'date_of_birth' => 'required|date',
-        ]);
-
-        $student->update($validated);
-
-        return redirect()->route('students.index')->with('success', 'Student updated successfully!');
+        //
     }
 
     /**
@@ -89,9 +72,6 @@ class StudentController extends Controller
      */
     public function destroy(string $id)
     {
-        $student = Student::findOrFail($id);
-        $student->delete();
-
-        return redirect()->route('students.index')->with('success', 'Student deleted successfully.');
+        //
     }
 }
