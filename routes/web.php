@@ -4,12 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\CourseController;
 
-// Resource routes for Students and Courses
+// Route for the students index page (show all students)
 Route::resource('students', StudentController::class);
+
+// Route for the courses index page (show all courses)
 Route::resource('courses', CourseController::class);
 
-// Redirect root to the students page
+// Redirect to the students page by default
 Route::get('/', function () {
-    return redirect('/students');
+    return redirect('/students'); // Redirect the root to the students page
 });
-

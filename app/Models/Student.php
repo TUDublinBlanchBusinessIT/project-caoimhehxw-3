@@ -13,6 +13,6 @@ class Student extends Model
 
     public function course()
     {
-        return $this->belongsTo(Course::class); // Define the relationship with the Course model
+        return $this->belongsTo(Course::class); // Define the relation to the Course model
     }
 }

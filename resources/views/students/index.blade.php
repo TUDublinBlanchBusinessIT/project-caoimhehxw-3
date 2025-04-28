@@ -17,8 +17,10 @@
         </div>
     </form>
 
+    <!-- Button to Add New Student -->
     <a href="{{ route('students.create') }}" class="btn btn-success mb-3">Add New Student</a>
 
+    <!-- Table of Students -->
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -32,29 +34,28 @@
             </tr>
         </thead>
         <tbody>
-            @forelse ($students as $student)
+            @foreach ($students as $student)
                 <tr>
                     <td>{{ $student->id }}</td>
                     <td>{{ $student->name }}</td>
                     <td>{{ $student->email }}</td>
                     <td>{{ $student->date_of_birth }}</td>
+                    <!-- Show Course if it's available -->
                     <td>{{ $student->course->course ?? 'N/A' }}</td>
                     <td>{{ $student->created_at->format('d M Y') }}</td>
-                    <td class="d-flex gap-2">
+                    <td>
+                        <!-- Edit Button -->
                         <a href="{{ route('students.edit', $student->id) }}" class="btn btn-warning btn-sm">Edit</a>
-
-                        <form action="{{ route('students.destroy', $student->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
+                        
+                        <!-- Delete Button with confirmation -->
+                        <form action="{{ route('students.destroy', $student->id) }}" method="POST" onsubmit="return confirm('Are you sure?');" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                         </form>
                     </td>
                 </tr>
-            @empty
-                <tr>
-                    <td colspan="7">No students found.</td>
-                </tr>
-            @endforelse
+            @endforeach
         </tbody>
     </table>
 </div>
