@@ -17,11 +17,11 @@
         </div>
     </form>
 
-    <!-- Button to Add New Student -->
+    <!-- Add New Student Button -->
     <a href="{{ route('students.create') }}" class="btn btn-success mb-3">Add New Student</a>
 
-    <!-- Table of Students -->
-    <table class="table table-bordered">
+    <!-- Students Table -->
+    <table class="table table-bordered table-responsive">
         <thead>
             <tr>
                 <th>ID</th>
@@ -29,7 +29,6 @@
                 <th>Email</th>
                 <th>Date of Birth</th>
                 <th>Course</th>
-                <th>Created At</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -40,14 +39,9 @@
                     <td>{{ $student->name }}</td>
                     <td>{{ $student->email }}</td>
                     <td>{{ $student->date_of_birth }}</td>
-                    <!-- Show Course if it's available -->
                     <td>{{ $student->course->course ?? 'N/A' }}</td>
-                    <td>{{ $student->created_at->format('d M Y') }}</td>
                     <td>
-                        <!-- Edit Button -->
                         <a href="{{ route('students.edit', $student->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        
-                        <!-- Delete Button with confirmation -->
                         <form action="{{ route('students.destroy', $student->id) }}" method="POST" onsubmit="return confirm('Are you sure?');" style="display:inline;">
                             @csrf
                             @method('DELETE')
