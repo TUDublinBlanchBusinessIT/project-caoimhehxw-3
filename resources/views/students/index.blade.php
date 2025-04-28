@@ -26,6 +26,7 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Date of Birth</th>
+                <th>Course</th>
                 <th>Created At</th>
                 <th>Actions</th>
             </tr>
@@ -37,6 +38,7 @@
                     <td>{{ $student->name }}</td>
                     <td>{{ $student->email }}</td>
                     <td>{{ $student->date_of_birth }}</td>
+                    <td>{{ $student->course->course ?? 'N/A' }}</td>
                     <td>{{ $student->created_at->format('d M Y') }}</td>
                     <td class="d-flex gap-2">
                         <a href="{{ route('students.edit', $student->id) }}" class="btn btn-warning btn-sm">Edit</a>
@@ -50,7 +52,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6">No students found.</td>
+                    <td colspan="7">No students found.</td>
                 </tr>
             @endforelse
         </tbody>

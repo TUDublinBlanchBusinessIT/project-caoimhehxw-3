@@ -7,26 +7,20 @@ use App\Models\Course;
 
 class CourseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Display the list of courses
     public function index()
     {
         $courses = Course::all();
         return view('courses.index', compact('courses'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Show the form for creating a new course
     public function create()
     {
         return view('courses.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Store the newly created course
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -38,19 +32,15 @@ class CourseController extends Controller
         return redirect()->route('courses.index')->with('success', 'Course added successfully!');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    // Show the form for editing the course
+    public function edit($id)
     {
         $course = Course::findOrFail($id);
         return view('courses.edit', compact('course'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    // Update the course in the database
+    public function update(Request $request, $id)
     {
         $validated = $request->validate([
             'course' => 'required|string|max:255',
@@ -62,10 +52,8 @@ class CourseController extends Controller
         return redirect()->route('courses.index')->with('success', 'Course updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    // Delete the course
+    public function destroy($id)
     {
         $course = Course::findOrFail($id);
         $course->delete();
