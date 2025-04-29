@@ -2,57 +2,92 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Course;
+use App\Models\Category;
+use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
-    // Display the list of courses
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        $courses = Course::all();
+        $courses = Course::with('category')->get();  // Get all courses with their categories
         return view('courses.index', compact('courses'));
     }
 
-    // Show the form for creating a new course
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-        return view('courses.create');
+        $categories = Category::all();  // Get all categories
+        return view('courses.create', compact('categories'));  // Pass categories to view
     }
 
-    // Store the newly created course
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
             'course' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',  // Validate the category exists
+            'course_description' => 'required|string|max:500',
+            'start_date' => 'required|date',
+            'status' => 'required|string',
         ]);
 
-        Course::create($validated);
+        Course::create([
+            'course_name' => $validated['course'],
+            'category_id' => $validated['category_id'],
+            'course_description' => $validated['course_description'],
+            'start_date' => $validated['start_date'],
+            'status' => $validated['status'],
+        ]);
 
         return redirect()->route('courses.index')->with('success', 'Course added successfully!');
     }
 
-    // Show the form for editing the course
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit($id)
     {
         $course = Course::findOrFail($id);
-        return view('courses.edit', compact('course'));
+        $categories = Category::all();  // Get all categories
+        return view('courses.edit', compact('course', 'categories'));  // Pass course and categories to view
     }
 
-    // Update the course in the database
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
             'course' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
+            'course_description' => 'required|string|max:500',
+            'start_date' => 'required|date',
+            'status' => 'required|string',
         ]);
 
         $course = Course::findOrFail($id);
-        $course->update($validated);
+        $course->update([
+            'course_name' => $validated['course'],
+            'category_id' => $validated['category_id'],
+            'course_description' => $validated['course_description'],
+            'start_date' => $validated['start_date'],
+            'status' => $validated['status'],
+        ]);
 
         return redirect()->route('courses.index')->with('success', 'Course updated successfully!');
     }
 
-    // Delete the course
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy($id)
     {
         $course = Course::findOrFail($id);
