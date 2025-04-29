@@ -1,31 +1,23 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Models;
 
-use Illuminate\Http\Request;
-use App\Models\Category;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
-class CategoryController extends Controller
+class Category extends Model
 {
-    // Show the form for editing a category
-    public function edit($id)
-    {
-        $category = Category::findOrFail($id);  // Get the category by ID
-        return view('categories.edit', compact('category'));
-    }
+    use HasFactory;
 
-    // Update the category
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'category_name' => 'required|string|max:255',  // Validate the category name
-        ]);
+    // You can specify the table if it's not following Laravel's naming convention
+    // protected $table = 'categories'; 
 
-        $category = Category::findOrFail($id);  // Find the category by ID
-        $category->update([
-            'category_name' => $request->category_name,  // Update the category name
-        ]);
+    // You can define the fillable properties here
+    protected $fillable = ['category_name'];
 
-        return redirect()->route('categories.index')->with('success', 'Category updated successfully');
-    }
+    // Add any relationships if needed
+    // For example, if a category has many courses:
+    // public function courses() {
+    //     return $this->hasMany(Course::class);
+    // }
 }

@@ -4,52 +4,39 @@
 <div class="container mt-5">
     <h2>Add New Course</h2>
 
-    @if ($errors->any())
-        <div class="alert alert-danger mt-3">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <!-- Course Creation Form -->
-    <form action="{{ route('courses.store') }}" method="POST" class="mt-4">
+    <form action="{{ route('courses.store') }}" method="POST">
         @csrf
 
         <div class="form-group mb-3">
-            <label for="course" class="form-label">Course Name:</label>
-            <input type="text" name="course" id="course" class="form-control" required value="{{ old('course') }}" placeholder="Enter course name">
+            <label for="course">Course Name:</label>
+            <input type="text" name="course" class="form-control" value="{{ old('course') }}" required>
         </div>
 
         <div class="form-group mb-3">
-            <label for="course_description" class="form-label">Course Description:</label>
-            <textarea name="course_description" id="course_description" class="form-control" rows="4" placeholder="Enter a brief description of the course" required>{{ old('course_description') }}</textarea>
+            <label for="course_description">Course Description:</label>
+            <textarea name="course_description" class="form-control" required>{{ old('course_description') }}</textarea>
         </div>
 
         <div class="form-group mb-3">
-            <label for="course_category" class="form-label">Course Category:</label>
-            <select name="category_id" id="course_category" class="form-control" required>
+            <label for="category_id">Course Category:</label>
+            <select name="category_id" class="form-control" required>
                 <option value="">Select Category</option>
                 @foreach($categories as $category)
-                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                        {{ $category->category_name }}
-                    </option>
+                    <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                 @endforeach
             </select>
         </div>
 
         <div class="form-group mb-3">
-            <label for="start_date" class="form-label">Start Date:</label>
-            <input type="date" name="start_date" id="start_date" class="form-control" required value="{{ old('start_date') }}">
+            <label for="start_date">Start Date:</label>
+            <input type="date" name="start_date" class="form-control" required>
         </div>
 
         <div class="form-group mb-3">
-            <label for="status" class="form-label">Course Status:</label>
-            <select name="status" id="status" class="form-control" required>
-                <option value="Active" {{ old('status') == 'Active' ? 'selected' : '' }}>Active</option>
-                <option value="Inactive" {{ old('status') == 'Inactive' ? 'selected' : '' }}>Inactive</option>
+            <label for="status">Course Status:</label>
+            <select name="status" class="form-control" required>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
             </select>
         </div>
 
