@@ -4,6 +4,7 @@
 <div class="container mt-5">
     <h2>All Students</h2>
 
+    <!-- Success Message -->
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -17,11 +18,9 @@
         </div>
     </form>
 
-    <!-- Add New Student Button -->
     <a href="{{ route('students.create') }}" class="btn btn-success mb-3">Add New Student</a>
 
-    <!-- Students Table -->
-    <table class="table table-bordered table-responsive">
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <th>ID</th>
@@ -33,19 +32,20 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($students as $student)
+            @foreach($students as $student)
                 <tr>
                     <td>{{ $student->id }}</td>
                     <td>{{ $student->name }}</td>
                     <td>{{ $student->email }}</td>
                     <td>{{ $student->date_of_birth }}</td>
-                    <td>{{ $student->course->course ?? 'N/A' }}</td>
+                    <td>{{ $student->course->category_name ?? 'No course assigned' }}</td>
                     <td>
+                        <a href="{{ route('students.show', $student->id) }}" class="btn btn-info btn-sm">View</a>
                         <a href="{{ route('students.edit', $student->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('students.destroy', $student->id) }}" method="POST" onsubmit="return confirm('Are you sure?');" style="display:inline;">
+                        <form action="{{ route('students.destroy', $student->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            <button class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
                         </form>
                     </td>
                 </tr>

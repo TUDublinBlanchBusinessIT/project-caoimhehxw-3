@@ -5,17 +5,16 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\CategoryController;
 
-// Home route (redirect to students by default)
-Route::get('/', function () {
-    return redirect('/students');
-});
-
-// Student routes
+// Route for Students
 Route::resource('students', StudentController::class);
 
-// Course routes
+// Route for Courses
 Route::resource('courses', CourseController::class);
 
-// Category routes for managing course categories
+// Route for Categories
 Route::resource('categories', CategoryController::class);
 
+// Default route for the home page (students list or another view)
+Route::get('/', function () {
+    return redirect('/students');  // Redirect to students index page
+});

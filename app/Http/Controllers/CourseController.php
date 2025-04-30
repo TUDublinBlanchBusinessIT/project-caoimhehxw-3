@@ -13,7 +13,8 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::with('category')->get();  // Get all courses with their categories
+        // Get all courses with their categories
+        $courses = Course::with('category')->get();
         return view('courses.index', compact('courses'));
     }
 
@@ -22,8 +23,9 @@ class CourseController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();  // Get all categories
-        return view('courses.create', compact('categories'));  // Pass categories to view
+        // Get all categories for the dropdown
+        $categories = Category::all();
+        return view('courses.create', compact('categories'));
     }
 
     /**
@@ -31,14 +33,16 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
+        // Validate the course input
         $validated = $request->validate([
             'course' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',  // Validate the category exists
+            'category_id' => 'required|exists:categories,id',  // Validate category_id exists
             'course_description' => 'required|string|max:500',
             'start_date' => 'required|date',
             'status' => 'required|string',
         ]);
 
+        // Create the new course in the database
         Course::create([
             'course_name' => $validated['course'],
             'category_id' => $validated['category_id'],
@@ -51,13 +55,24 @@ class CourseController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show($id)
+    {
+        // Find the course by ID and pass it to the view
+        $course = Course::findOrFail($id);
+        return view('courses.show', compact('course'));
+    }
+
+    /**
      * Show the form for editing the specified resource.
      */
     public function edit($id)
     {
+        // Find the course by ID and pass it to the view along with categories
         $course = Course::findOrFail($id);
-        $categories = Category::all();  // Get all categories
-        return view('courses.edit', compact('course', 'categories'));  // Pass course and categories to view
+        $categories = Category::all();
+        return view('courses.edit', compact('course', 'categories'));
     }
 
     /**
@@ -65,6 +80,7 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Validate the course input
         $validated = $request->validate([
             'course' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
@@ -73,6 +89,7 @@ class CourseController extends Controller
             'status' => 'required|string',
         ]);
 
+        // Find the course and update its details
         $course = Course::findOrFail($id);
         $course->update([
             'course_name' => $validated['course'],
@@ -90,6 +107,7 @@ class CourseController extends Controller
      */
     public function destroy($id)
     {
+        // Find the course by ID and delete it
         $course = Course::findOrFail($id);
         $course->delete();
 
