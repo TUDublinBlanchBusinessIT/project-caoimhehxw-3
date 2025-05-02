@@ -1,7 +1,6 @@
 @extends('layout')
 
 @section('content')
-<div class="container mt-5">
     <h2>All Students</h2>
 
     <a href="{{ route('students.create') }}" class="btn btn-primary mb-3">Add New Student</a>
@@ -12,7 +11,7 @@
         </div>
     @endif
 
-    <table class="table">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>ID</th>
@@ -27,7 +26,8 @@
                 <tr>
                     <td>{{ $student->id }}</td>
                     <td>{{ $student->name }}</td>
-                    <td>{{ $student->course->course_name ?? 'No course assigned' }}</td>
+                    <td>{{ $student->email }}</td>
+                    <td>{{ $student->course ? $student->course->course_name : 'No course assigned' }}</td>
                     <td>
                         <a href="{{ route('students.show', $student->id) }}" class="btn btn-info btn-sm">View</a>
                         <a href="{{ route('students.edit', $student->id) }}" class="btn btn-warning btn-sm">Edit</a>
@@ -41,5 +41,4 @@
             @endforeach
         </tbody>
     </table>
-</div>
 @endsection

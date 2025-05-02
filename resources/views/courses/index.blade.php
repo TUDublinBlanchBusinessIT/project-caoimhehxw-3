@@ -1,15 +1,17 @@
 @extends('layout')
 
 @section('content')
-<div class="container mt-5">
     <h2>All Courses</h2>
+
     <a href="{{ route('courses.create') }}" class="btn btn-primary mb-3">Add New Course</a>
 
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
     @endif
 
-    <table class="table">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>ID</th>
@@ -23,15 +25,7 @@
                 <tr>
                     <td>{{ $course->id }}</td>
                     <td>{{ $course->course_name }}</td>
-                    <td>
-                        @if($course->students->isEmpty())
-                            No students assigned
-                        @else
-                            @foreach($course->students as $student)
-                                <p>{{ $student->name }}</p>
-                            @endforeach
-                        @endif
-                    </td>
+                    <td>{{ $course->students->count() ? $course->students->pluck('name')->join(', ') : 'No students assigned' }}</td>
                     <td>
                         <a href="{{ route('courses.show', $course->id) }}" class="btn btn-info btn-sm">View</a>
                         <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-warning btn-sm">Edit</a>
@@ -45,5 +39,4 @@
             @endforeach
         </tbody>
     </table>
-</div>
 @endsection
