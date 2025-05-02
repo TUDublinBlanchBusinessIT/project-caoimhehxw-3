@@ -4,7 +4,7 @@
 <div class="container mt-5">
     <h2>Student Details</h2>
 
-    <table class="table table-bordered">
+    <table class="table">
         <tr>
             <th>Name</th>
             <td>{{ $student->name }}</td>
@@ -14,12 +14,8 @@
             <td>{{ $student->email }}</td>
         </tr>
         <tr>
-            <th>Date of Birth</th>
-            <td>{{ $student->date_of_birth }}</td>
-        </tr>
-        <tr>
             <th>Course</th>
-            <td>{{ $student->course ? $student->course->category_name : 'No course assigned' }}</td>
+            <td>{{ $student->course->course_name ?? 'No course assigned' }}</td>
         </tr>
     </table>
 

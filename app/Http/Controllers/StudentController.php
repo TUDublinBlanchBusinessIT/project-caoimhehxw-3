@@ -8,93 +8,74 @@ use Illuminate\Http\Request;
 
 class StudentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Display all students
     public function index()
     {
-        $students = Student::all(); // Get all students
-        return view('students.index', compact('students')); // Pass to index view
+        $students = Student::all();  // Retrieve all students
+        return view('students.index', compact('students'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Show the form for creating a new student
     public function create()
     {
-        $courses = Course::all();  // Fetch all courses for the select dropdown
-        return view('students.create', compact('courses'));  // Pass to create student form
+        $courses = Course::all(); // Retrieve all courses
+        return view('students.create', compact('courses'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Store a newly created student
     public function store(Request $request)
     {
-        // Validate student input
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:students',
-            'course_id' => 'required|exists:courses,id', // Ensure the selected course exists
+            'email' => 'required|email|unique:students',
+            'course_id' => 'required|exists:courses,id',  // Validate that course_id exists in courses table
         ]);
 
-        // Create the new student
+        // Create a new student
         Student::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'course_id' => $validated['course_id'],  // Assign the course to the student
-        ]);
-
-        return redirect()->route('students.index')->with('success', 'Student added successfully!');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        $student = Student::with('course')->findOrFail($id); // Get student with related course
-        return view('students.show', compact('student')); // Pass student data to view
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        $student = Student::findOrFail($id);  // Get student
-        $courses = Course::all();  // Get all courses for the select dropdown
-        return view('students.edit', compact('student', 'courses'));  // Pass to edit form
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:students,email,' . $id,
-            'course_id' => 'required|exists:courses,id', // Ensure the selected course exists
-        ]);
-
-        $student = Student::findOrFail($id); // Find student by ID
-        $student->update([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'course_id' => $validated['course_id'],
         ]);
 
+        return redirect()->route('students.index')->with('success', 'Student added successfully!');
+    }
+
+    // Display the specified student
+    public function show($id)
+    {
+        $student = Student::findOrFail($id);  // Find the student by ID
+        return view('students.show', compact('student'));
+    }
+
+    // Show the form for editing the specified student
+    public function edit($id)
+    {
+        $student = Student::findOrFail($id);  // Find the student by ID
+        $courses = Course::all(); // Get all courses for the dropdown
+        return view('students.edit', compact('student', 'courses'));
+    }
+
+    // Update the specified student
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'course_id' => 'required|exists:courses,id',  // Validate that course_id exists
+        ]);
+
+        $student = Student::findOrFail($id); // Find the student by ID
+        $student->update($validated);
+
         return redirect()->route('students.index')->with('success', 'Student updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    // Remove the specified student from storage
     public function destroy($id)
     {
-        $student = Student::findOrFail($id);  // Find student by ID
-        $student->delete();  // Delete student
+        $student = Student::findOrFail($id);
+        $student->delete();
 
         return redirect()->route('students.index')->with('success', 'Student deleted successfully!');
     }
