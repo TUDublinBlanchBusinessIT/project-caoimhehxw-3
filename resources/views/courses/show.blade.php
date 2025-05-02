@@ -10,10 +10,6 @@
             <td>{{ $course->course_name }}</td>
         </tr>
         <tr>
-            <th>Category</th>
-            <td>{{ $course->category ? $course->category->category_name : 'No category assigned' }}</td>
-        </tr>
-        <tr>
             <th>Description</th>
             <td>{{ $course->course_description }}</td>
         </tr>

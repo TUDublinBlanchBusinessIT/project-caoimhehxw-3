@@ -9,7 +9,12 @@ class Course extends Model
 {
     use HasFactory;
 
+    // Fillable fields for mass assignment
     protected $fillable = [
-        'course',
+        'course_name',
+        'course_description',
+        'start_date',
+        'status',
     ];
 }
+
