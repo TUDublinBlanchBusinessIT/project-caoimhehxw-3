@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -12,8 +13,9 @@ class CourseController extends Controller
      */
     public function index()
     {
-        // Get all courses (no category relationship needed anymore)
-        $courses = Course::all();
+        // Get all courses with their associated students
+        $courses = Course::with('students')->get();
+
         return view('courses.index', compact('courses'));
     }
 
@@ -22,7 +24,6 @@ class CourseController extends Controller
      */
     public function create()
     {
-        // No categories to pass anymore, just the course creation form
         return view('courses.create');
     }
 
@@ -31,7 +32,7 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate course input (no category validation anymore)
+        // Validate course input
         $validated = $request->validate([
             'course_name' => 'required|string|max:255',
             'course_description' => 'required|string|max:500',
@@ -39,7 +40,7 @@ class CourseController extends Controller
             'status' => 'required|string',
         ]);
 
-        // Create the new course (no category_id required)
+        // Create the new course
         Course::create([
             'course_name' => $validated['course_name'],
             'course_description' => $validated['course_description'],
@@ -55,8 +56,10 @@ class CourseController extends Controller
      */
     public function show($id)
     {
-        // Find the course by ID
-        $course = Course::findOrFail($id);
+        // Find the course by ID with related students
+        $course = Course::with('students')->findOrFail($id);
+
+        // Pass the course and its students to the view
         return view('courses.show', compact('course'));
     }
 
@@ -67,6 +70,8 @@ class CourseController extends Controller
     {
         // Find the course by ID and pass to the edit view
         $course = Course::findOrFail($id);
+
+        // Pass the course to the edit view
         return view('courses.edit', compact('course'));
     }
 
@@ -75,7 +80,7 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // Validate course input (no category validation anymore)
+        // Validate course input
         $validated = $request->validate([
             'course_name' => 'required|string|max:255',
             'course_description' => 'required|string|max:500',

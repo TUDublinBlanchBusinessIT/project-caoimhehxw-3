@@ -10,6 +10,16 @@
             <td>{{ $course->course_name }}</td>
         </tr>
         <tr>
+            <th>Students Enrolled</th>
+            <td>
+                @forelse($course->students as $student)
+                    <p>{{ $student->name }} - {{ $student->email }}</p>
+                @empty
+                    <p>No students assigned</p>
+                @endforelse
+            </td>
+        </tr>
+        <tr>
             <th>Description</th>
             <td>{{ $course->course_description }}</td>
         </tr>

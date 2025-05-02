@@ -13,8 +13,8 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = Student::all();
-        return view('students.index', compact('students'));
+        $students = Student::all(); // Get all students
+        return view('students.index', compact('students')); // Pass to index view
     }
 
     /**
@@ -22,8 +22,8 @@ class StudentController extends Controller
      */
     public function create()
     {
-        $courses = Course::all();  // Get all courses for the dropdown
-        return view('students.create', compact('courses'));
+        $courses = Course::all();  // Fetch all courses for the select dropdown
+        return view('students.create', compact('courses'));  // Pass to create student form
     }
 
     /**
@@ -31,14 +31,19 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
+        // Validate student input
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:students,email',
-            'date_of_birth' => 'required|date',
-            'course_id' => 'required|exists:courses,id', // Ensure course_id exists
+            'email' => 'required|string|email|max:255|unique:students',
+            'course_id' => 'required|exists:courses,id', // Ensure the selected course exists
         ]);
 
-        Student::create($validated);
+        // Create the new student
+        Student::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'course_id' => $validated['course_id'],  // Assign the course to the student
+        ]);
 
         return redirect()->route('students.index')->with('success', 'Student added successfully!');
     }
@@ -48,8 +53,8 @@ class StudentController extends Controller
      */
     public function show($id)
     {
-        $student = Student::findOrFail($id);  // Find the student by ID
-        return view('students.show', compact('student'));  // Pass student to the show view
+        $student = Student::with('course')->findOrFail($id); // Get student with related course
+        return view('students.show', compact('student')); // Pass student data to view
     }
 
     /**
@@ -57,9 +62,9 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        $student = Student::findOrFail($id);
-        $courses = Course::all();  // Get all courses for the dropdown
-        return view('students.edit', compact('student', 'courses'));
+        $student = Student::findOrFail($id);  // Get student
+        $courses = Course::all();  // Get all courses for the select dropdown
+        return view('students.edit', compact('student', 'courses'));  // Pass to edit form
     }
 
     /**
@@ -69,13 +74,16 @@ class StudentController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email',
-            'date_of_birth' => 'required|date',
-            'course_id' => 'required|exists:courses,id',
+            'email' => 'required|string|email|max:255|unique:students,email,' . $id,
+            'course_id' => 'required|exists:courses,id', // Ensure the selected course exists
         ]);
 
-        $student = Student::findOrFail($id);
-        $student->update($validated);
+        $student = Student::findOrFail($id); // Find student by ID
+        $student->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'course_id' => $validated['course_id'],
+        ]);
 
         return redirect()->route('students.index')->with('success', 'Student updated successfully!');
     }
@@ -85,8 +93,8 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        $student = Student::findOrFail($id);
-        $student->delete();
+        $student = Student::findOrFail($id);  // Find student by ID
+        $student->delete();  // Delete student
 
         return redirect()->route('students.index')->with('success', 'Student deleted successfully!');
     }
