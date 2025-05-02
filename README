@@ -1,0 +1,38 @@
+# **Project Name: Laravel Course Management System**
+
+## **Project Overview**
+This project is a **Course Management System** built using **Laravel**. It allows users to manage courses and students, including features to add, edit, delete, and view courses and student information.
+
+## **Key Features**
+1. **Student Management**:
+   - Add new students.
+   - Edit and update student information.
+   - Delete students.
+   - View student details with course assignments.
+
+2. **Course Management**:
+   - Add new courses.
+   - Edit course information (name, description, status, etc.).
+   - Delete courses.
+   - View courses with assigned students.
+
+3. **Student-Course Association**:
+   - Each student can be assigned to a course.
+   - View the students assigned to each course and vice versa.
+
+4. **Responsive Design**:
+   - Uses Bootstrap for styling and layout.
+
+5. **CRUD Functionality**:
+   - The application supports full CRUD operations for both students and courses.
+   - Easy-to-use interfaces for creating, reading, updating, and deleting records.
+
+## **Technologies Used**
+- **Backend**: PHP, Laravel 8
+- **Frontend**: HTML, CSS, Bootstrap
+- **Database**: MySQL
+- **Version Control**: Git, GitHub
+
+## **Installation**
+
+### **Clone the repository**:
